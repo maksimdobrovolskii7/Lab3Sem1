@@ -44,9 +44,26 @@ public class MissionWebController {
     }
 
     @PostMapping("/missions/{id}/report")
-    public String generateReport(@PathVariable Long id, @ModelAttribute ReportParameters params, Model model) {
+    public String generateReport(
+            @PathVariable Long id,
+            @RequestParam(value = "showBasic", required = false, defaultValue = "false") boolean showBasic,
+            @RequestParam(value = "showCurse", required = false, defaultValue = "false") boolean showCurse,
+            @RequestParam(value = "showSorcerers", required = false, defaultValue = "false") boolean showSorcerers,
+            @RequestParam(value = "showTechniques", required = false, defaultValue = "false") boolean showTechniques,
+            @RequestParam(value = "showExtensions", required = false, defaultValue = "false") boolean showExtensions,
+            Model model) {
+
+        ReportParameters params = new ReportParameters();
+        params.setShowBasic(showBasic);
+        params.setShowCurse(showCurse);
+        params.setShowSorcerers(showSorcerers);
+        params.setShowTechniques(showTechniques);
+        params.setShowExtensions(showExtensions);
+
         ReportData report = missionService.generateReport(id, params);
         model.addAttribute("report", report);
+        model.addAttribute("id", id);
+        model.addAttribute("params", params);
         return "report";
     }
 }

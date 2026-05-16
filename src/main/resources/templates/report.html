@@ -5,12 +5,28 @@
 </head>
 <body>
 <h1>Отчёт о миссии</h1>
-<form method="post" th:action="@{/missions/{id}/report(id=${id})}" th:object="${params}">
-    <label><input type="checkbox" th:field="*{showBasic}" /> Основная информация</label><br/>
-    <label><input type="checkbox" th:field="*{showCurse}" /> Проклятие</label><br/>
-    <label><input type="checkbox" th:field="*{showSorcerers}" /> Маги</label><br/>
-    <label><input type="checkbox" th:field="*{showTechniques}" /> Техники</label><br/>
-    <label><input type="checkbox" th:field="*{showExtensions}" /> Дополнительные данные</label><br/>
+
+<form method="post" th:action="@{/missions/{id}/report(id=${id})}">
+    <label>
+        <input type="checkbox" name="showBasic" th:checked="${params.showBasic}" />
+        Основная информация
+    </label><br/>
+    <label>
+        <input type="checkbox" name="showCurse" th:checked="${params.showCurse}" />
+        Проклятие
+    </label><br/>
+    <label>
+        <input type="checkbox" name="showSorcerers" th:checked="${params.showSorcerers}" />
+        Маги
+    </label><br/>
+    <label>
+        <input type="checkbox" name="showTechniques" th:checked="${params.showTechniques}" />
+        Техники
+    </label><br/>
+    <label>
+        <input type="checkbox" name="showExtensions" th:checked="${params.showExtensions}" />
+        Дополнительные данные
+    </label><br/>
     <button type="submit">Сформировать</button>
 </form>
 
@@ -25,12 +41,12 @@
         <p>Ущерб: <span th:text="${report.damageCost}"/> ¥</p>
         <p th:if="${report.note}">Примечание: <span th:text="${report.note}"/></p>
     </div>
-    <div th:if="${report.appliedParams.showCurse and report.curse}">
+    <div th:if="${report.appliedParams.showCurse and report.curse != null}">
         <h2>Проклятие</h2>
         <p>Имя: <span th:text="${report.curse.name}"/></p>
         <p>Уровень: <span th:text="${report.curse.threatLevel}"/></p>
     </div>
-    <div th:if="${report.appliedParams.showSorcerers and report.sorcerers}">
+    <div th:if="${report.appliedParams.showSorcerers and report.sorcerers != null}">
         <h2>Маги</h2>
         <ul>
             <li th:each="s : ${report.sorcerers}">
@@ -38,7 +54,7 @@
             </li>
         </ul>
     </div>
-    <div th:if="${report.appliedParams.showTechniques and report.techniques}">
+    <div th:if="${report.appliedParams.showTechniques and report.techniques != null}">
         <h2>Техники</h2>
         <ul>
             <li th:each="t : ${report.techniques}">
@@ -46,7 +62,7 @@
             </li>
         </ul>
     </div>
-    <div th:if="${report.appliedParams.showExtensions and report.extensions}">
+    <div th:if="${report.appliedParams.showExtensions and report.extensions != null}">
         <h2>Расширения</h2>
         <pre th:text="${#strings.toString(report.extensions)}"></pre>
     </div>
