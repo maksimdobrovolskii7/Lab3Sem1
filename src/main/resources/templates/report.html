@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Отчёт о миссии</title>
+</head>
+<body>
+<h1>Отчёт о миссии</h1>
+
+<form method="post" th:action="@{/missions/{id}/report(id=${id})}">
+    <label>
+        <input type="checkbox" name="showBasic" th:checked="${params.showBasic}" />
+        Основная информация
+    </label><br/>
+    <label>
+        <input type="checkbox" name="showCurse" th:checked="${params.showCurse}" />
+        Проклятие
+    </label><br/>
+    <label>
+        <input type="checkbox" name="showSorcerers" th:checked="${params.showSorcerers}" />
+        Маги
+    </label><br/>
+    <label>
+        <input type="checkbox" name="showTechniques" th:checked="${params.showTechniques}" />
+        Техники
+    </label><br/>
+    <label>
+        <input type="checkbox" name="showExtensions" th:checked="${params.showExtensions}" />
+        Дополнительные данные
+    </label><br/>
+    <button type="submit">Сформировать</button>
+</form>
+
+<div th:if="${report}">
+    <hr/>
+    <div th:if="${report.appliedParams.showBasic}">
+        <h2>Миссия</h2>
+        <p>ID: <span th:text="${report.missionId}"/></p>
+        <p>Дата: <span th:text="${report.date}"/></p>
+        <p>Место: <span th:text="${report.location}"/></p>
+        <p>Результат: <span th:text="${report.outcome}"/></p>
+        <p>Ущерб: <span th:text="${report.damageCost}"/> ¥</p>
+        <p th:if="${report.note}">Примечание: <span th:text="${report.note}"/></p>
+    </div>
+    <div th:if="${report.appliedParams.showCurse and report.curse != null}">
+        <h2>Проклятие</h2>
+        <p>Имя: <span th:text="${report.curse.name}"/></p>
+        <p>Уровень: <span th:text="${report.curse.threatLevel}"/></p>
+    </div>
+    <div th:if="${report.appliedParams.showSorcerers and report.sorcerers != null}">
+        <h2>Маги</h2>
+        <ul>
+            <li th:each="s : ${report.sorcerers}">
+                <span th:text="${s.name}"/> (<span th:text="${s.rank}"/>)
+            </li>
+        </ul>
+    </div>
+    <div th:if="${report.appliedParams.showTechniques and report.techniques != null}">
+        <h2>Техники</h2>
+        <ul>
+            <li th:each="t : ${report.techniques}">
+                <span th:text="${t.name}"/> – тип: <span th:text="${t.type}"/>, владелец: <span th:text="${t.owner}"/>, урон: <span th:text="${t.damage}"/>
+            </li>
+        </ul>
+    </div>
+    <div th:if="${report.appliedParams.showExtensions and report.extensions != null}">
+        <h2>Расширения</h2>
+        <pre th:text="${#strings.toString(report.extensions)}"></pre>
+    </div>
+</div>
+</body>
+</html>

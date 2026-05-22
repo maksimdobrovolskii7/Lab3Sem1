@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Архив миссий</title>
+</head>
+<body>
+<h1>Токийский магический колледж – Архив миссий</h1>
+<div th:if="${success}" th:text="${success}" style="color:green"></div>
+<div th:if="${error}" th:text="${error}" style="color:red"></div>
+
+<h2>Загрузить новую миссию</h2>
+<form method="post" enctype="multipart/form-data" th:action="@{/upload}">
+    <input type="file" name="file" required/>
+    <button type="submit">Загрузить</button>
+</form>
+
+<h2>Архив миссий</h2>
+<table border="1">
+    <tr>
+        <th>ID</th><th>Mission ID</th><th>Дата</th><th>Локация</th><th>Результат</th><th>Отчёт</th>
+    </tr>
+    <tr th:each="m : ${missions}">
+        <td th:text="${m.id}"></td>
+        <td th:text="${m.missionId}"></td>
+        <td th:text="${m.date}"></td>
+        <td th:text="${m.location}"></td>
+        <td th:text="${m.outcome}"></td>
+        <td><a th:href="@{/missions/{id}/report(id=${m.id})}">Сформировать отчёт</a></td>
+    </tr>
+</table>
+</body>
+</html>
