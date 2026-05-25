@@ -1,4 +1,4 @@
-package com.jujutsu.archive.service.parser;
+package parser;
 
 import com.jujutsu.archive.exception.InvalidMissionFormatException;
 import java.io.File;

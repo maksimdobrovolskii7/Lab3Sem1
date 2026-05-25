@@ -1,4 +1,4 @@
-package com.jujutsu.archive.service.parser;
+package parser;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.jujutsu.archive.service.parser;
+package parser;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
