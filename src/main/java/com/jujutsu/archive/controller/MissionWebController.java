@@ -12,23 +12,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class MissionWebController {
     private final MissionService missionService;
-    private final MissionApiController apiController;
 
-    public MissionWebController(MissionService missionService, MissionApiController apiController) {
+    public MissionWebController(MissionService missionService) {
         this.missionService = missionService;
-        this.apiController = apiController;
     }
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("missions", apiController.listMissions());
+        model.addAttribute("missions", missionService.getAllMissions());
         return "index";
     }
 
     @PostMapping("/upload")
     public String uploadMission(@RequestParam("file") MultipartFile file, RedirectAttributes ra) {
         try {
-            apiController.uploadMission(file);
+            missionService.uploadMission(file);
             ra.addFlashAttribute("success", "Mission uploaded successfully");
         } catch (Exception e) {
             ra.addFlashAttribute("error", "Upload failed: " + e.getMessage());

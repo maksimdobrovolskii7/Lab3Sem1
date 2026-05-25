@@ -10,10 +10,22 @@ import com.jujutsu.archive.parser.Mission;
 import com.jujutsu.archive.parser.ParserFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.jujutsu.archive.dto.MissionSummary;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+
+/**
+ * Сервис для управления миссиями.
+ * Содержит бизнес-логику: загрузка, сохранение, генерация отчётов.
+ *
+ * @author Ваше Имя
+ * @version 1.0
+ */
+
 
 @Service
 public class MissionService {
@@ -37,5 +49,11 @@ public class MissionService {
         MissionEntity entity = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Mission not found"));
         return ReportData.fromEntity(entity, params);
+    }
+
+    public List<MissionSummary> getAllMissions() {
+        return repository.findAll().stream()
+                .map(m -> new MissionSummary(m.getId(), m.getMissionId(), m.getDate(), m.getLocation(), m.getOutcome()))
+                .collect(Collectors.toList());
     }
 }
