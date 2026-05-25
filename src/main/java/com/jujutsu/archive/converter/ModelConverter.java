@@ -1,7 +1,7 @@
-package com.jujutsu.archive.service.converter;
+package com.jujutsu.archive.converter;
 
 import com.jujutsu.archive.entity.*;
-import com.jujutsu.archive.service.parser.Mission;
+import com.jujutsu.archive.parser.Mission;
 import java.util.stream.Collectors;
 
 public class ModelConverter {

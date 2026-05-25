@@ -1,4 +1,4 @@
-package com.jujutsu.archive.service.parser;
+package com.jujutsu.archive.parser;
 
 import java.io.File;
 import java.util.ArrayList;
