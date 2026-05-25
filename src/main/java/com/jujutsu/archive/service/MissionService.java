@@ -56,4 +56,9 @@ public class MissionService {
                 .map(m -> new MissionSummary(m.getId(), m.getMissionId(), m.getDate(), m.getLocation(), m.getOutcome()))
                 .collect(Collectors.toList());
     }
+    public MissionEntity getMissionById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Миссия с id " + id + " не найдена"));
+    }
+
 }
