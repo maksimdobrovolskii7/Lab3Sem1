@@ -13,6 +13,8 @@ public class PipeParser implements MissionParser {
             List<Mission.Technique> techniques = new ArrayList<>();
             List<String> notes = new ArrayList<>();
             String line;
+            Map<String, List<Map<String, String>>> timelineEvents = new HashMap<>();
+            Map<String, String> civilianImpact = new HashMap<>();
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
@@ -62,6 +64,33 @@ public class PipeParser implements MissionParser {
                     case "NOTE":
                         if (parts.length >= 2) notes.add(parts[1]);
                         break;
+                    case "TIMELINE_EVENT":
+                        if (parts.length >= 4) {
+                            Map<String, String> event = new HashMap<>();
+                            event.put("timestamp", parts[1]);
+                            event.put("type", parts[2]);
+                            event.put("description", parts[3]);
+                            timelineEvents.computeIfAbsent("timeline", k -> new ArrayList<>()).add(event);
+                        }
+                        break;
+                    case "ENEMY_ACTION":
+                        if (parts.length >= 3) {
+                            Map<String, String> action = new HashMap<>();
+                            action.put("type", parts[1]);
+                            action.put("description", parts[2]);
+                            timelineEvents.computeIfAbsent("enemy_actions", k -> new ArrayList<>()).add(action);
+                        }
+                        break;
+                    case "CIVILIAN_IMPACT":
+                        if (parts.length >= 2) {
+                            for (int i = 1; i < parts.length; i++) {
+                                String[] kv = parts[i].split("=");
+                                if (kv.length == 2) {
+                                    civilianImpact.put(kv[0], kv[1]);
+                                }
+                            }
+                        }
+                        break;
                     default:
                         notes.add("Unprocessed: " + line);
                         break;
@@ -70,7 +99,10 @@ public class PipeParser implements MissionParser {
             mission.setSorcerers(sorcerers);
             mission.setTechniques(techniques);
             if (!notes.isEmpty()) mission.setNote(String.join("\n", notes));
-            mission.setExtensions(new HashMap<>());
+            Map<String, Object> extensions = new HashMap<>();
+            if (!timelineEvents.isEmpty()) extensions.put("timeline_events", timelineEvents);
+            if (!civilianImpact.isEmpty()) extensions.put("civilian_impact", civilianImpact);
+            mission.setExtensions(extensions);
             if (mission.getMissionId() == null) throw new InvalidMissionFormatException("Missing missionId");
             if (mission.getCurse() == null) throw new InvalidMissionFormatException("Missing curse");
             if (mission.getSorcerers() == null || mission.getSorcerers().isEmpty()) throw new InvalidMissionFormatException("No sorcerers");
