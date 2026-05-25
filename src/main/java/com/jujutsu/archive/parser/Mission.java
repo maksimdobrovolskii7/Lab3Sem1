@@ -1,5 +1,6 @@
 package com.jujutsu.archive.parser;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import java.util.Map;
@@ -72,4 +73,19 @@ public class Mission {
         public long getDamage() { return damage; }
         public void setDamage(long damage) { this.damage = damage; }
     }
+
+    @JsonAnySetter
+    public void setExtension(String key, Object value) {
+        java.util.Set<String> knownKeys = java.util.Set.of(
+                "missionId", "date", "location", "outcome", "damageCost", "note",
+                "curse", "sorcerers", "techniques", "extensions"
+        );
+        if (!knownKeys.contains(key)) {
+            if (this.extensions == null) {
+                this.extensions = new java.util.HashMap<>();
+            }
+            this.extensions.put(key, value);
+        }
+    }
+
 }
