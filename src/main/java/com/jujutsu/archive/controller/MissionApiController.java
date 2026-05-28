@@ -10,6 +10,7 @@ import com.jujutsu.archive.dto.ReportData;
 import com.jujutsu.archive.dto.ReportParameters;
 import com.jujutsu.archive.entity.MissionEntity;
 import com.jujutsu.archive.service.MissionService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
@@ -53,8 +54,12 @@ public class MissionApiController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get mission by ID", description = "Возвращает миссию по её ID в базе данных")
-    public MissionEntity getMissionById(@PathVariable Long id) {
-        return missionService.getMissionById(id);
+    public ResponseEntity<MissionEntity> getMissionById(@PathVariable Long id) {
+        try {
+            MissionEntity mission = missionService.getMissionById(id);
+            return ResponseEntity.ok(mission);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
-
 }
