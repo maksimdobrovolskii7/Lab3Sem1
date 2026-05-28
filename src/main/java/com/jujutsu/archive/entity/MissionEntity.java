@@ -18,7 +18,8 @@ public class MissionEntity {
     private String location;
     private String outcome;
     private long damageCost;
-    @Embedded
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "curse_id")
     private CurseEntity curse;
     @ElementCollection
     @CollectionTable(name = "mission_sorcerers", joinColumns = @JoinColumn(name = "mission_id"))
