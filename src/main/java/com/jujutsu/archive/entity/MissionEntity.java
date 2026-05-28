@@ -18,8 +18,8 @@ public class MissionEntity {
     private String location;
     private String outcome;
     private long damageCost;
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "curse_id")
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "curse_id", unique = true)
     private CurseEntity curse;
     @ElementCollection
     @CollectionTable(name = "mission_sorcerers", joinColumns = @JoinColumn(name = "mission_id"))

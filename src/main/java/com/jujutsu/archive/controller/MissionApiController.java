@@ -46,7 +46,10 @@ public class MissionApiController {
 
     @PostMapping("/{id}/report")
     @Operation(summary = "Generate report for a specific mission")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Отчёт успешно сгенерирован"), @ApiResponse(responseCode = "404", description = "Миссия не найдена")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200",
+                    description = "Отчёт успешно сгенерирован"),
+            @ApiResponse(responseCode = "404",
+                    description = "Миссия не найдена")
     })
     public ReportData generateReport(@PathVariable Long id, @RequestBody ReportParameters params) {
         return missionService.generateReport(id, params);

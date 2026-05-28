@@ -2,8 +2,6 @@ package com.jujutsu.archive.entity;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table(name = "curses")
 public class CurseEntity {
@@ -16,9 +14,8 @@ public class CurseEntity {
 
     private String threatLevel;
 
-    @OneToMany(mappedBy = "curse")
-    private List<MissionEntity> missions;
-
+    @OneToOne(mappedBy = "curse")
+    private MissionEntity mission;
 
     public Long getId() {
         return id;
@@ -28,15 +25,27 @@ public class CurseEntity {
         this.id = id;
     }
 
-    public List<MissionEntity> getMissions() {
-        return missions;
+    public String getName() {
+        return name;
     }
 
-    public void setMissions(List<MissionEntity> missions) {
-        this.missions = missions;
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getThreatLevel() { return threatLevel; }
-    public void setThreatLevel(String threatLevel) { this.threatLevel = threatLevel; }
+
+    public String getThreatLevel() {
+        return threatLevel;
+    }
+
+    public void setThreatLevel(String threatLevel) {
+        this.threatLevel = threatLevel;
+    }
+
+    public MissionEntity getMission() {
+        return mission;
+    }
+
+    public void setMission(MissionEntity mission) {
+        this.mission = mission;
+    }
 }
