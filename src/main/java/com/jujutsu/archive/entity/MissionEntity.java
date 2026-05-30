@@ -24,6 +24,7 @@ public class MissionEntity {
     @ElementCollection
     @CollectionTable(name = "mission_sorcerers", joinColumns = @JoinColumn(name = "mission_id"))
     private List<SorcererEntity> sorcerers;
+
     @ElementCollection
     @CollectionTable(name = "mission_techniques", joinColumns = @JoinColumn(name = "mission_id"))
     private List<TechniqueEntity> techniques;
