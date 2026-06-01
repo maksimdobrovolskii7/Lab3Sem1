@@ -1,6 +1,7 @@
 package com.jujutsu.archive.entity;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
@@ -29,7 +30,7 @@ public class MissionEntity {
     @JoinColumn(name = "curse_id", unique = true)
     private CurseEntity curse;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "mission_sorcerers",
             joinColumns = @JoinColumn(name = "mission_id"),
@@ -37,7 +38,7 @@ public class MissionEntity {
     )
     private List<SorcererEntity> sorcerers;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "mission_techniques",
             joinColumns = @JoinColumn(name = "mission_id"),
@@ -122,6 +123,42 @@ public class MissionEntity {
 
     public void setTechniques(List<TechniqueEntity> techniques) {
         this.techniques = techniques;
+    }
+
+    public void addSorcerer(SorcererEntity sorcerer) {
+        if (sorcerer == null) {
+            return;
+        }
+        if (this.sorcerers == null) {
+            this.sorcerers = new ArrayList<>();
+        }
+        if (!this.sorcerers.contains(sorcerer)) {
+            this.sorcerers.add(sorcerer);
+        }
+        if (sorcerer.getMissions() == null) {
+            sorcerer.setMissions(new ArrayList<>());
+        }
+        if (!sorcerer.getMissions().contains(this)) {
+            sorcerer.getMissions().add(this);
+        }
+    }
+
+    public void addTechnique(TechniqueEntity technique) {
+        if (technique == null) {
+            return;
+        }
+        if (this.techniques == null) {
+            this.techniques = new ArrayList<>();
+        }
+        if (!this.techniques.contains(technique)) {
+            this.techniques.add(technique);
+        }
+        if (technique.getMissions() == null) {
+            technique.setMissions(new ArrayList<>());
+        }
+        if (!technique.getMissions().contains(this)) {
+            technique.getMissions().add(this);
+        }
     }
 
     public String getNote() {

@@ -59,10 +59,22 @@ class ModelConverterTest {
         assertNotNull(entity.getSorcerers());
         assertEquals(1, entity.getSorcerers().size());
         assertEquals("Тестовый маг", entity.getSorcerers().get(0).getName());
+        assertEquals("GRADE_1", entity.getSorcerers().get(0).getRank());
 
         assertNotNull(entity.getTechniques());
         assertEquals(1, entity.getTechniques().size());
         assertEquals("Тестовая техника", entity.getTechniques().get(0).getName());
+
+        // Проверяем связь между техникой и магом
+        TechniqueEntity savedTech = entity.getTechniques().get(0);
+        assertNotNull(savedTech.getSorcerer());
+        assertEquals("Тестовый маг", savedTech.getSorcerer().getName());
+
+        // Проверяем обратную связь - у мага есть техника
+        SorcererEntity savedSorcerer = entity.getSorcerers().get(0);
+        assertNotNull(savedSorcerer.getTechniques());
+        assertEquals(1, savedSorcerer.getTechniques().size());
+        assertEquals("Тестовая техника", savedSorcerer.getTechniques().get(0).getName());
 
         assertNotNull(entity.getExtensions());
         assertEquals("test", entity.getExtensions().get("customField"));
@@ -76,6 +88,8 @@ class ModelConverterTest {
         mission.setLocation("Токио");
         mission.setOutcome("SUCCESS");
         mission.setCurse(null);
+        mission.setSorcerers(List.of(new Mission.Sorcerer()));
+        mission.getSorcerers().get(0).setName("Маг");
 
         MissionEntity entity = ModelConverter.toEntity(mission);
 
@@ -106,6 +120,8 @@ class ModelConverterTest {
         mission.setLocation("Токио");
         mission.setOutcome("SUCCESS");
         mission.setTechniques(null);
+        mission.setSorcerers(List.of(new Mission.Sorcerer()));
+        mission.getSorcerers().get(0).setName("Маг");
 
         MissionEntity entity = ModelConverter.toEntity(mission);
 

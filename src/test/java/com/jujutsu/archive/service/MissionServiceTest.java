@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +29,8 @@ class MissionServiceTest {
     private MissionService missionService;
 
     private MissionEntity testEntity;
+    private SorcererEntity testSorcerer;
+    private TechniqueEntity testTechnique;
 
     @BeforeEach
     void setUp() {
@@ -45,6 +46,23 @@ class MissionServiceTest {
         curse.setName("Тестовое проклятие");
         curse.setThreatLevel("HIGH");
         testEntity.setCurse(curse);
+
+        testSorcerer = new SorcererEntity();
+        testSorcerer.setId(1L);
+        testSorcerer.setName("Тестовый маг");
+        testSorcerer.setRank("GRADE_1");
+
+        testTechnique = new TechniqueEntity();
+        testTechnique.setId(1L);
+        testTechnique.setName("Тестовая техника");
+        testTechnique.setType("INNATE");
+        testTechnique.setOwner("Тестовый маг");
+        testTechnique.setDamage(50000);
+        testTechnique.setSorcerer(testSorcerer);
+
+        testSorcerer.setTechniques(List.of(testTechnique));
+        testEntity.setSorcerers(List.of(testSorcerer));
+        testEntity.setTechniques(List.of(testTechnique));
     }
 
     @Test
@@ -98,6 +116,10 @@ class MissionServiceTest {
         assertNotNull(result);
         assertEquals("M-001", result.getMissionId());
         assertEquals("SUCCESS", result.getOutcome());
+        assertNotNull(result.getSorcerers());
+        assertEquals(1, result.getSorcerers().size());
+        assertNotNull(result.getTechniques());
+        assertEquals(1, result.getTechniques().size());
         verify(repository, times(1)).findById(1L);
     }
 
@@ -129,5 +151,7 @@ class MissionServiceTest {
         assertNotNull(result);
         assertEquals("M-001", result.getMissionId());
         assertNull(result.getCurse());
+        assertNull(result.getSorcerers());
+        assertNull(result.getTechniques());
     }
 }
